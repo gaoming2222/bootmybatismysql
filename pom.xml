@@ -6,7 +6,6 @@
   <artifactId>SpringBootFirst</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>jar</packaging>
-
   <name>SpringBootFirst</name>
   <url>http://maven.apache.org</url>
 
@@ -21,7 +20,7 @@
         <groupId>org.springframework.boot</groupId>  
         <artifactId>spring-boot-starter-parent</artifactId>  
         <version>1.3.0.RELEASE</version>  
-   </parent>
+  </parent>
 
   <dependencies>  
         <!-- spring boot -->  
