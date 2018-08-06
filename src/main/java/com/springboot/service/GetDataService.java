@@ -8,18 +8,18 @@ import org.springframework.stereotype.Service;
 import com.springboot.entity.FbtmpR;
 import com.springboot.entity.FctmpP;
 import com.springboot.entity.TmpR;
-import com.springboot.entity.Users;
+import com.springboot.entity.Station;
 import com.springboot.mapper.FbtmpRMapper;
 import com.springboot.mapper.FctmpPMapper;
 import com.springboot.mapper.TmpRMapper;
-import com.springboot.mapper.UserMapper;
+import com.springboot.mapper.StationMapper;
 import com.springboot.tools.JsonUtility;
 
 @Service
 public class GetDataService {
 	
 	@Autowired
-    private UserMapper userMapper;
+    private StationMapper userMapper;
 	
 	@Autowired
     private FbtmpRMapper fbtmpRMapper;
@@ -31,7 +31,7 @@ public class GetDataService {
     private TmpRMapper tmpRMapper;
 	
 	public String getAllUsers() {
-		List<Users> users = userMapper.getAllUsers();
+		List<Station> users = userMapper.getAllStations();
 		return JsonUtility.convertBean2Json(users);
     }
 	

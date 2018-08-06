@@ -12,4 +12,20 @@
        from 
        ST_FCTMP_P u
     </select>
+    
+    <select id="getFctmpPById" resultType="FctmpP" parameterType="java.util.HashMap">
+       select
+       u.StationID,
+       u.Datatime,
+       u.Depth,
+       u.Wtmp,
+       u.Xh,
+       u.Rdatatime
+       from 
+       ST_FCTMP_P u
+       where 
+       u.StationID = #{StationID}
+       and u.Datatime >= #{strtDate}
+       and #{enDate} >= u.Datatime
+    </select>
 </mapper>

@@ -1,6 +1,7 @@
 package com.springboot.mapper;
 
 import java.util.List;
+import java.util.Map;
 
 import com.springboot.entity.FctmpP;
 /**
@@ -16,5 +17,8 @@ public interface FctmpPMapper {
 	 * @return
 	 */
 	public List<FctmpP> getAllFctmpP();
+	
+	
+	public List<FctmpP> getFctmpPById(Map<String,Object> param);
 
 }

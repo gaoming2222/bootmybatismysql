@@ -14,4 +14,19 @@
        from 
        ST_TMP_R u
     </select>
+    
+    <select id="getTmpRById" resultType="TmpR" parameterType="java.util.HashMap">
+       select top 32768
+       b.StationID,
+       b.datatime,
+       a.data,
+       a.dataplus,
+       b.ATMP,
+       b.WTMP
+       from 
+       ST_TMP_R b left join water a
+       on a.datatime = b.Datatime and a.stationid = b.StationID 
+       where b.StationID = #{StationID}
+       order by b.Datatime desc
+    </select>
 </mapper>

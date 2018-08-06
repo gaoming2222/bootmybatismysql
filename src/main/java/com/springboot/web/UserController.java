@@ -1,6 +1,7 @@
 package com.springboot.web;
 
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -84,10 +85,10 @@ public class UserController{
 	@RequestMapping("/exportTmpR")
     @ResponseBody
 	public Map<String,Object> exportTmpR() {
-		List<TmpR> tmpRs = tmpRMapper.getAllTmpR();
+		//List<TmpR> tmpRs = tmpRMapper.getAllTmpR();
 		try {
 			//return data2ExcelService.exportTmpR(tmpRs, response);
-			return data2ExcelService.exportTmpR(tmpRs);
+			return data2ExcelService.exportTmpR(null);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -98,10 +99,10 @@ public class UserController{
 	@RequestMapping("/exportFctmpP")
     @ResponseBody
 	public Map<String,Object> exportFctmpP() {
-		List<FctmpP> fctmpPs = fctmpPMapper.getAllFctmpP();
+		//List<FctmpP> fctmpPs = fctmpPMapper.getAllFctmpP();
 		try {
 			//return data2ExcelService.exportTmpR(tmpRs, response);
-			return data2ExcelService.exportFctmpP(fctmpPs);
+			return data2ExcelService.exportFctmpP(null);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -122,6 +123,7 @@ public class UserController{
 		return null;
 		
 	}
+	@SuppressWarnings("null")
 	@Scheduled(cron = "0 */1 * * * * ")
 	@RequestMapping("/sendMail")
     @ResponseBody
@@ -131,19 +133,19 @@ public class UserController{
 		Map<String,Object> isMapTmp  = new HashMap<>();
 		Map<String,Object> isMapFbtmpR  = new HashMap<>();
 		Map<String,Object> isMapFctmpP  = new HashMap<>();
-		//File file = new File("D:\\20180417.rar");
-		isMapTmp = exportTmpR();
-		isMapFbtmpR = exportFbtmpR();
+		//isMapTmp = exportTmpR();
+		//isMapFbtmpR = exportFbtmpR();
 		isMapFctmpP = exportFctmpP();
-		if(isMapTmp != null){
+		if(isMapTmp != null && !isMapTmp.isEmpty() && isMapTmp.size() > 0 && isMapTmp.keySet() != null){
 			isMapList.add(isMapTmp);
 		}
-		if(isMapFbtmpR != null){
+		if(isMapFbtmpR != null && !isMapFbtmpR.isEmpty() && isMapFbtmpR.size() > 0 && isMapFbtmpR.keySet() != null){
 			isMapList.add(isMapFbtmpR);
 		}
-		if(isMapFctmpP != null){
+		if(isMapFctmpP != null && !isMapFctmpP.isEmpty() && isMapFctmpP.size() > 0 && isMapFctmpP.keySet() != null){
 			isMapList.add(isMapFctmpP);
 		}
+		//File fileTmpR = new File("d://test.xls")
         //14516778王志飞  305355933雷昌友
         try {
 			sendMailService.sendMail("1925013282@qq.com", "你好，这是长江水利委员会水文监测数据，无需回复。", "水文数据邮件",null,isMapList);

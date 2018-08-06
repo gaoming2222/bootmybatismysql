@@ -24,6 +24,7 @@ public class ExcelUtil {
 
         // 第二步，在workbook中添加一个sheet,对应Excel文件中的sheet
         HSSFSheet sheet = wb.createSheet(sheetName);
+        sheet.setColumnWidth(1, 256*21);
 
         // 第三步，在sheet中添加表头第0行,注意老版本poi对Excel的行数列数有限制
         HSSFRow row = sheet.createRow(0);

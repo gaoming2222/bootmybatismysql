@@ -1,20 +1,18 @@
 package com.springboot.entity;
+
 /**
  * 
- * @author codergaoming
- *  表层水温
+ * @author codergaoming 表层水温
  */
 
 public class TmpR {
-	
+
 	private String StationID;
-	private String Datatime;
+	private String datatime;
+	private String data;
+	private String dataplus;
 	private String ATMP;
 	private String WTMP;
-	private String RDataTime;
-	private String Trantype;
-	private String Sourcetype;
-	private String _MASK_FROM_V2;
 	public String getStationID() {
 		return StationID;
 	}
@@ -22,10 +20,22 @@ public class TmpR {
 		StationID = stationID;
 	}
 	public String getDatatime() {
-		return Datatime;
+		return datatime;
 	}
 	public void setDatatime(String datatime) {
-		Datatime = datatime;
+		this.datatime = datatime;
+	}
+	public String getData() {
+		return data;
+	}
+	public void setData(String data) {
+		this.data = data;
+	}
+	public String getDataplus() {
+		return dataplus;
+	}
+	public void setDataplus(String dataplus) {
+		this.dataplus = dataplus;
 	}
 	public String getATMP() {
 		return ATMP;
@@ -39,31 +49,8 @@ public class TmpR {
 	public void setWTMP(String wTMP) {
 		WTMP = wTMP;
 	}
-	public String getRDataTime() {
-		return RDataTime;
-	}
-	public void setRDataTime(String rDataTime) {
-		RDataTime = rDataTime;
-	}
-	public String getTrantype() {
-		return Trantype;
-	}
-	public void setTrantype(String trantype) {
-		Trantype = trantype;
-	}
-	public String getSourcetype() {
-		return Sourcetype;
-	}
-	public void setSourcetype(String sourcetype) {
-		Sourcetype = sourcetype;
-	}
-	public String get_MASK_FROM_V2() {
-		return _MASK_FROM_V2;
-	}
-	public void set_MASK_FROM_V2(String _MASK_FROM_V2) {
-		this._MASK_FROM_V2 = _MASK_FROM_V2;
-	}
 	
+
 	
 
 }

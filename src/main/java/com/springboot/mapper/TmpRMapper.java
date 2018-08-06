@@ -1,6 +1,7 @@
 package com.springboot.mapper;
 
 import java.util.List;
+import java.util.Map;
 
 import com.springboot.entity.TmpR;;
 
@@ -10,5 +11,8 @@ public interface TmpRMapper {
 	 * @return
 	 */
 	public List<TmpR> getAllTmpR();
+	
+	
+	public List<TmpR> getTmpRById(Map<String,Object> map);
 
 }
