@@ -1,7 +1,5 @@
 package com.springboot.web;
 
-
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,11 +18,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.springboot.entity.FbtmpR;
-import com.springboot.entity.FctmpP;
-import com.springboot.entity.TmpR;
+import com.springboot.entity.Station;
 import com.springboot.mapper.FbtmpRMapper;
-import com.springboot.mapper.FctmpPMapper;
-import com.springboot.mapper.TmpRMapper;
 import com.springboot.service.Data2ExcelServcie;
 import com.springboot.service.GetDataService;
 import com.springboot.service.SendMailService;
@@ -41,14 +36,10 @@ public class UserController{
 	@Autowired
 	private GetDataService getDataService;
 	
-	@Autowired
-	private TmpRMapper tmpRMapper;
 	
 	@Autowired
 	private FbtmpRMapper  fbtmpRMapper;
-	
-	@Autowired
-	private FctmpPMapper fctmpPMapper;
+
 	
 	@Autowired
 	private Data2ExcelServcie data2ExcelService;
@@ -98,11 +89,10 @@ public class UserController{
 	
 	@RequestMapping("/exportFctmpP")
     @ResponseBody
-	public Map<String,Object> exportFctmpP() {
-		//List<FctmpP> fctmpPs = fctmpPMapper.getAllFctmpP();
+	public Map<String,Object> exportFctmpP(Station station) {
 		try {
 			//return data2ExcelService.exportTmpR(tmpRs, response);
-			return data2ExcelService.exportFctmpP(null);
+			return data2ExcelService.exportFctmpP(station);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -123,7 +113,6 @@ public class UserController{
 		return null;
 		
 	}
-	@SuppressWarnings("null")
 	@Scheduled(cron = "0 */1 * * * * ")
 	@RequestMapping("/sendMail")
     @ResponseBody
@@ -133,20 +122,31 @@ public class UserController{
 		Map<String,Object> isMapTmp  = new HashMap<>();
 		Map<String,Object> isMapFbtmpR  = new HashMap<>();
 		Map<String,Object> isMapFctmpP  = new HashMap<>();
-		//isMapTmp = exportTmpR();
-		//isMapFbtmpR = exportFbtmpR();
-		isMapFctmpP = exportFctmpP();
+		isMapTmp = exportTmpR();
 		if(isMapTmp != null && !isMapTmp.isEmpty() && isMapTmp.size() > 0 && isMapTmp.keySet() != null){
 			isMapList.add(isMapTmp);
 		}
+		isMapFbtmpR = exportFbtmpR();
 		if(isMapFbtmpR != null && !isMapFbtmpR.isEmpty() && isMapFbtmpR.size() > 0 && isMapFbtmpR.keySet() != null){
 			isMapList.add(isMapFbtmpR);
 		}
-		if(isMapFctmpP != null && !isMapFctmpP.isEmpty() && isMapFctmpP.size() > 0 && isMapFctmpP.keySet() != null){
-			isMapList.add(isMapFctmpP);
+		Station station1 = new Station();
+		Station station2 = new Station();
+		station1.setStationid("7777");
+		station1.setCName("向家坝坝前");
+		station2.setStationid("6666");
+		station2.setCName("溪洛渡坝前 ");
+		List<Station> stationList = new ArrayList<>();
+		stationList.add(station1);
+		stationList.add(station2);
+		for(Station station : stationList){
+			isMapFctmpP = exportFctmpP(station);
+			if(isMapFctmpP != null && !isMapFctmpP.isEmpty() && isMapFctmpP.size() > 0 && isMapFctmpP.keySet() != null){
+				isMapList.add(isMapFctmpP);
+			}
 		}
 		//File fileTmpR = new File("d://test.xls")
-        //14516778王志飞  305355933雷昌友
+        //14516778王志飞  305355933雷昌友  高明1925013282
         try {
 			sendMailService.sendMail("1925013282@qq.com", "你好，这是长江水利委员会水文监测数据，无需回复。", "水文数据邮件",null,isMapList);
 		} catch (IOException e) {

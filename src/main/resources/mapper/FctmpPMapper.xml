@@ -20,7 +20,8 @@
        u.Depth,
        u.Wtmp,
        u.Xh,
-       u.Rdatatime
+       u.Rdatatime,
+       u.Water
        from 
        ST_FCTMP_P u
        where 
