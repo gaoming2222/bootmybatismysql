@@ -7,7 +7,7 @@ import com.springboot.entity.TmpR;;
 
 public interface TmpRMapper {
 	
-	/**获取所有用户信息
+	/**获取所有表层水温
 	 * @return
 	 */
 	public List<TmpR> getAllTmpR();

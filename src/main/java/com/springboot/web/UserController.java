@@ -75,58 +75,61 @@ public class UserController{
 	
 	@RequestMapping("/exportTmpR")
     @ResponseBody
-	public Map<String,Object> exportTmpR() {
-		//List<TmpR> tmpRs = tmpRMapper.getAllTmpR();
+	public Map<String,Object> exportTmpR() throws Exception{
 		try {
-			//return data2ExcelService.exportTmpR(tmpRs, response);
-			return data2ExcelService.exportTmpR(null);
+			return data2ExcelService.exportTmpR();
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("exportTmpR:生成excel文档错误" + e.getMessage());
+			throw new  Exception(e);
 		}
-		return null;
-		
 	}
 	
 	@RequestMapping("/exportFctmpP")
     @ResponseBody
-	public Map<String,Object> exportFctmpP(Station station) {
+	public Map<String,Object> exportFctmpP(Station station) throws Exception {
 		try {
-			//return data2ExcelService.exportTmpR(tmpRs, response);
 			return data2ExcelService.exportFctmpP(station);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("exportFctmpP:生成excel文档错误" + e.getMessage());
+			throw new  Exception(e);
 		}
-		return null;
-		
 	}
 	
 	@RequestMapping("/exportFbtmpR")
     @ResponseBody
-	public Map<String,Object> exportFbtmpR() {
-		List<FbtmpR> fbtmpRs = fbtmpRMapper.getAllFbtmpR();
+	public Map<String,Object> exportFbtmpR() throws Exception {
+		List<FbtmpR> fbtmpRs = new ArrayList<>();
 		try {
-			//return data2ExcelService.exportTmpR(tmpRs, response);
+			logger.info("exportFbtmpR：查询分布链水温开始");
+			fbtmpRs = fbtmpRMapper.getAllFbtmpR();
+			logger.info("exportFbtmpR：查询分布链水温完成");
+		} catch (Exception e) {
+			logger.error("查询分布链水温失败 " + e.getMessage());
+			throw new Exception(e);
+		}
+		
+		try {
 			return data2ExcelService.exportFbtmpR(fbtmpRs);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("exportFbtmpR:生成excel文档错误" + e.getMessage());
+			throw new  Exception(e);
 		}
-		return null;
-		
 	}
-	@Scheduled(cron = "0 */1 * * * * ")
+	//@Scheduled(cron = "0 0 9 * * ?")
+	@Scheduled(cron = "0 */1 * * * ?")
 	@RequestMapping("/sendMail")
     @ResponseBody
-	public void sendMail(){
-		logger.info("定时任务启动成功");
+	public void sendMail() throws Exception{
+		logger.info("sendMail：发送邮件定时任务开始");
 		List<Map<String,Object>> isMapList = new ArrayList<>();
 		Map<String,Object> isMapTmp  = new HashMap<>();
 		Map<String,Object> isMapFbtmpR  = new HashMap<>();
 		Map<String,Object> isMapFctmpP  = new HashMap<>();
-		isMapTmp = exportTmpR();
+		//isMapTmp = exportTmpR();
 		if(isMapTmp != null && !isMapTmp.isEmpty() && isMapTmp.size() > 0 && isMapTmp.keySet() != null){
 			isMapList.add(isMapTmp);
 		}
-		isMapFbtmpR = exportFbtmpR();
+		//isMapFbtmpR = exportFbtmpR();
 		if(isMapFbtmpR != null && !isMapFbtmpR.isEmpty() && isMapFbtmpR.size() > 0 && isMapFbtmpR.keySet() != null){
 			isMapList.add(isMapFbtmpR);
 		}
@@ -137,7 +140,7 @@ public class UserController{
 		station2.setStationid("6666");
 		station2.setCName("溪洛渡坝前 ");
 		List<Station> stationList = new ArrayList<>();
-		stationList.add(station1);
+		//stationList.add(station1);
 		stationList.add(station2);
 		for(Station station : stationList){
 			isMapFctmpP = exportFctmpP(station);
@@ -147,12 +150,14 @@ public class UserController{
 		}
 		//File fileTmpR = new File("d://test.xls")
         //14516778王志飞  305355933雷昌友  高明1925013282
+		String mailAddress = "1925013282@qq.com";
         try {
-			sendMailService.sendMail("1925013282@qq.com", "你好，这是长江水利委员会水文监测数据，无需回复。", "水文数据邮件",null,isMapList);
+        	logger.info("sendMail: 邮件接收邮箱：" + mailAddress);
+			sendMailService.sendMail(mailAddress, "你好，这是长江水利委员会水文监测数据，无需回复。", "水文数据邮件",null,isMapList);
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error("sendMail:邮件发送失败" + e.getMessage());
+			throw new Exception(e);
 		}  
         logger.info("邮件发送成功");
-		
 	}
 }

@@ -22,8 +22,8 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import javax.mail.internet.MimeUtility;
 import javax.mail.util.ByteArrayDataSource;
-
 import org.springframework.stereotype.Service;
+
 
 @Service
 public class SendMailService {
@@ -42,7 +42,7 @@ public class SendMailService {
      * @param is  附件（输入流的形式）
      * @throws IOException 
      */  
-    /* 发送验证信息的邮件 */  
+    /* 发送验证信息的邮件 */
     public boolean sendMail(String to, String text, String title,File file,List<Map<String,Object>> isMapList) throws IOException {  
         Properties props = new Properties();  
         props.setProperty("mail.smtp.host", "smtp.163.com"); // 设置发送邮件的邮件服务器的属性（这里使用网易的smtp服务器）  
@@ -55,6 +55,7 @@ public class SendMailService {
         try {  
             message.setFrom(new InternetAddress(from));  
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(to)); // 加载收件人地址  
+            //message.addRecipients(MimeMessage.RecipientType.TO, arg1); //用于添加多个收件人
             message.setSubject(title); // 加载标题  
             Multipart multipart = new MimeMultipart(); // 向multipart对象中添加邮件的各个部分内容，包括文本内容和附件  
             BodyPart contentPart = new MimeBodyPart(); // 设置邮件的文本内容  

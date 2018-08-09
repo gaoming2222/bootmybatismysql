@@ -43,9 +43,9 @@ public class Data2ExcelServcie {
 	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	SimpleDateFormat sdf8 = new SimpleDateFormat("yyyy-MM-dd");
 
-	@SuppressWarnings("rawtypes")
-	public Map<String, Object> exportTmpR(List list1) throws Exception {
-		
+	
+	public Map<String, Object> exportTmpR() throws Exception {
+		logger.info("exportTmpR：生成excel开始");
 		//初始化sheet页
 		List<String> ids = new ArrayList<>();
 		ids.add("5001");
@@ -65,7 +65,15 @@ public class Data2ExcelServcie {
 		
 		List<Station> stationList1 = new ArrayList<>();
 		List<Station> stationList = new ArrayList<>();
-		stationList1 = stationMapper.getAllStations();
+		try{
+			logger.info("exportTmpR:查询所有站点信息开始");
+			stationList1 = stationMapper.getAllStations();
+			logger.info("exportTmpR:查询所有站点信息完成");
+		}catch(Exception e){
+			logger.error("exportTmpR：查询所有站点信息失败");
+			throw new Exception(e);
+		}
+		
 		for(Station station : stationList1){
 			if (ids.contains((station.getStationid()))) {
 				stationList.add(station);
@@ -78,13 +86,16 @@ public class Data2ExcelServcie {
 
 		// excel文件名
 		String fileName = "2018年汇总表" + sdf.format(new Date()) + ".xls";
-		
+		logger.info("fileName" + fileName);
 		for(Station station : stationList){
 			String sheetName = station.getCName();
+			logger.info("fileName + sheetName" + fileName + "-" + sheetName);
 			Map<String,Object> params = new HashMap<>();
 			params.put("StationID", station.getStationid());
 			Thread.sleep(10*1000);
+			logger.info("exportTmpR: 查询表层水温信息开始" + params);
 			List<TmpR> list = tmpRMapper.getTmpRById(params);
+			logger.info("exportTmpR: 查询表层水温信息完成");
 			String[][] content = new String[list.size()][];
 			for (int i = 0; i < list.size(); i++) {
 				content[i] = new String[title.length];
@@ -108,7 +119,7 @@ public class Data2ExcelServcie {
 
 		resMap.put("FILE_NAME", fileName);
 		resMap.put("FILE", is);
-
+		logger.info("exportTmpR：生成excel完成");
 		return resMap;
 
 		// //响应到客户端
@@ -125,22 +136,25 @@ public class Data2ExcelServcie {
 	
 	@SuppressWarnings("rawtypes")
 	public Map<String, Object> exportFbtmpR(List list) throws Exception {
-
+		logger.info("exportFbtmpR: 生成excel开始");
+		if(list == null || list.size() == 0){
+			logger.error("exportFbtmpR：分布链水温数据为空");
+		}
 		Map<String, Object> resMap = new HashMap<String, Object>();
 		// excel标题
 		String[] title = { "站点ID", "数据时间", "高程", "水温","水位"};
-
 		// excel文件名
 		String fileName = "叠梁门水温数据表" + sdf.format(new Date()) + ".xls";
-
+		logger.info("filename" + fileName);
+		// excel文件内容
 		String[][] content = new String[list.size()][];
 
-		 Calendar date = Calendar.getInstance();
-	     String year = String.valueOf(date.get(Calendar.YEAR));
+		Calendar date = Calendar.getInstance();
+	    String year = String.valueOf(date.get(Calendar.YEAR));
 	        
 		// sheet名
 		String sheetName =  year  + "年主数据";
-
+		logger.info("filename + sheetname" + fileName + "-" + sheetName);
 		for (int i = 0; i < list.size(); i++) {
 			content[i] = new String[title.length];
 			FbtmpR obj = (FbtmpR) list.get(i);
@@ -148,9 +162,7 @@ public class Data2ExcelServcie {
 			content[i][1] = obj.getDatatime();
 			content[i][2] = obj.getDepth();
 			content[i][3] = obj.getWtmp();
-			//content[i][4] = obj.getWater();
 		}
-
 		// 创建HSSFWorkbook
 		HSSFWorkbook wb = ExcelUtil.getHSSFWorkbook(sheetName, title, content, null);
 
@@ -160,38 +172,25 @@ public class Data2ExcelServcie {
 		byte[] bt = baos.toByteArray();
 		InputStream is = new ByteArrayInputStream(bt, 0, bt.length);
 		baos.close();
-
 		resMap.put("FILE_NAME", fileName);
 		resMap.put("FILE", is);
-
+		logger.info("exportFbtmpR: 生成excel完成");
 		return resMap;
-
-		// //响应到客户端
-		// try{
-		// this.setResponseHeader(response, fileName);
-		// OutputStream os = response.getOutputStream();
-		// wb.write(os);
-		// os.flush();
-		// os.close();
-		// }catch(Exception e){
-		// e.printStackTrace();
-		// }
 	}
 	
 	
 	public Map<String, Object> exportFctmpP(Station station) throws Exception {
-
+		logger.info("exportFctmpP:生成excel开始");
 		Map<String, Object> resMap = new HashMap<String, Object>();
 		// excel标题
 		String[] title = { "站点ID", "数据时间", "温度", "高程", "库水位" };
 
 		// excel文件名
 		String fileName = station.getCName() + sdf8.format(new Date()) + ".xls";
-
+		logger.info("fileName" + fileName);
 		// 组合查询参数，昨天9：00-今天8：00的所有数据
 		Map<String, Object> param = new HashMap<>();
 		Calendar calendar = Calendar.getInstance();
-
 		calendar.add(Calendar.DAY_OF_YEAR, -1);
 		calendar.set(Calendar.HOUR_OF_DAY, 9);
 		calendar.set(Calendar.MINUTE, 0);
@@ -200,6 +199,8 @@ public class Data2ExcelServcie {
 		Date strtDate = calendar.getTime();
 		calendar.add(Calendar.HOUR, 23);
 		Date enDate = calendar.getTime();
+		
+		
 
 		// TODO 由于没有数据,用于測試
 		String strt = "2018-05-28 09:00:00";
@@ -211,10 +212,17 @@ public class Data2ExcelServcie {
 		param.put("strtDate", strtDate);
 		param.put("enDate", enDate);
 		param.put("StationID", station.getStationid());
-
-		List<FctmpP> allFctmpPList = new ArrayList<>();
 		
-		allFctmpPList = fctmpPMapper.getFctmpPById(param);
+		List<FctmpP> allFctmpPList = new ArrayList<>();
+		try{
+			logger.info("exportFctmpP:查询分层水温数据开始" + param);
+			allFctmpPList = fctmpPMapper.getFctmpPById(param);
+			logger.info("exportFctmpP:查询分层水温数据完成");
+		}catch(Exception e){
+			logger.error("exportFctmpP:查询分层水温数据失败");
+			throw new Exception(e);
+		}
+		
 		int flag = 1;
 		HSSFWorkbook wb = new HSSFWorkbook();
 		while (flag <= 24) {
@@ -264,7 +272,7 @@ public class Data2ExcelServcie {
 			String sheetNameTmp = "库水位" + water + "，日期" + time;
 			String sheetNameTmp1 =  "日期" + time;
 			String sheetName = sheetNameTmp1.replace(':', '-');
-			logger.info(sheetNameTmp);
+			logger.info("filename + sheetname" + fileName + "-" +  sheetName);
 			// String sheetName = "test";
 
 			for (int i = 0; i < NotNulllist.size(); i++) {
@@ -292,32 +300,18 @@ public class Data2ExcelServcie {
 			}
 			 xydataset.addSeries("温度-高程", xydatas);
 			// 创建HSSFWorkbook
-			wb = ExcelUtil.getHSSFWorkbook1(sheetName, title, content, wb, xydataset, sheetName,sheetNameTmp);
-
-			
+			wb = ExcelUtil.getHSSFWorkbook1(sheetName, title, content, wb, xydataset, sheetName,sheetNameTmp);	
 		}
-
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		wb.write(baos);
 		baos.flush();
 		byte[] bt = baos.toByteArray();
 		InputStream is = new ByteArrayInputStream(bt, 0, bt.length);
 		baos.close();
-
 		resMap.put("FILE_NAME", fileName);
 		resMap.put("FILE", is);
+		logger.info("exportFctmpP:生成excel完成");
 		return resMap;
-
-		// //响应到客户端
-		// try{
-		// this.setResponseHeader(response, fileName);
-		// OutputStream os = response.getOutputStream();
-		// wb.write(os);
-		// os.flush();
-		// os.close();
-		// }catch(Exception e){
-		// e.printStackTrace();
-		// }
 	}
 
 //	// 发送响应流方法

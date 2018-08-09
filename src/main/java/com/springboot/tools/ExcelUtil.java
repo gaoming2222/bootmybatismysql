@@ -239,7 +239,7 @@ public class ExcelUtil {
         xylineandshaperenderer.setSeriesShape(0,new Ellipse2D.Double(-2, -2, 4, 4));//设置第一条曲线数据点的图形
         xylineandshaperenderer.setSeriesOutlinePaint(0,Color.black);//设置第一条曲线数据点画图型的颜色
         xylineandshaperenderer.setSeriesFillPaint(0,Color.BLUE);//设置第一条曲线数据点填充色
-        xylineandshaperenderer.setSeriesShapesVisible(0,false);//第一条线数据点可见
+        xylineandshaperenderer.setSeriesShapesVisible(0,true);//第一条线数据点可见
         xylineandshaperenderer.setUseOutlinePaint(false);//设置是否画曲线数据点的轮廓图形
         xylineandshaperenderer.setUseFillPaint(true);    //设置是否填充曲线数据点 
         xylineandshaperenderer.setBaseLinesVisible(true);

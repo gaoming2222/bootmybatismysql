@@ -6,7 +6,7 @@ import com.springboot.entity.Station;
 
 public interface StationMapper {
 
-	/**获取所有用户信息
+	/**获取所有站点信息
 	 * @return
 	 */
 	public List<Station> getAllStations();

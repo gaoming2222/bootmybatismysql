@@ -1,0 +1,126 @@
+2018-08-08 15:40:08 -Bound request context to thread: org.apache.catalina.connector.RequestFacade@427dffca
+2018-08-08 15:40:08 -DispatcherServlet with name 'dispatcherServlet' processing GET request for [/sendMail]
+2018-08-08 15:40:08 -Looking up handler method for path /sendMail
+2018-08-08 15:40:08 -Did not find handler method for [/sendMail]
+2018-08-08 15:40:08 -Looking up handler method for path /sendMail
+2018-08-08 15:40:08 -Returning handler method [public void com.springboot.web.UserController.sendMail() throws java.lang.Exception]
+2018-08-08 15:40:08 -Returning cached instance of singleton bean 'userController'
+2018-08-08 15:40:08 -Last-Modified value for [/sendMail] is: -1
+2018-08-08 15:40:08 -sendMail：发送邮件定时任务开始
+2018-08-08 15:40:08 -exportTmpR：生成excel开始
+2018-08-08 15:40:08 -exportTmpR:查询所有站点信息开始
+2018-08-08 15:40:08 -Creating a new SqlSession
+2018-08-08 15:40:08 -SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@42364f98] was not registered for synchronization because synchronization is not active
+2018-08-08 15:40:08 -Fetching JDBC Connection from DataSource
+2018-08-08 15:40:08 -JDBC Connection [ProxyConnection[PooledConnection[ConnectionID:10 ClientConnectionId: 1bc00e6a-5c88-4899-9b15-042a0896afca]]] will not be managed by Spring
+2018-08-08 15:40:08 -==>  Preparing: select u.Stationid,u.CName from RgStations u 
+2018-08-08 15:40:08 -==> Parameters: 
+2018-08-08 15:40:08 -<==      Total: 25
+2018-08-08 15:40:08 -Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@42364f98]
+2018-08-08 15:40:08 -Returning JDBC Connection to DataSource
+2018-08-08 15:40:08 -exportTmpR:查询所有站点信息完成
+2018-08-08 15:40:08 -fileName2018年汇总表2018-08-08 15:40:08.xls
+2018-08-08 15:40:08 -fileName + sheetName2018年汇总表2018-08-08 15:40:08.xls-向家坝大坝坝前      
+2018-08-08 15:40:18 -exportTmpR: 查询表层水温信息开始{StationID=5001}
+2018-08-08 15:40:18 -Creating a new SqlSession
+2018-08-08 15:40:18 -SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@3cc2b0c] was not registered for synchronization because synchronization is not active
+2018-08-08 15:40:18 -Fetching JDBC Connection from DataSource
+2018-08-08 15:40:18 -JDBC Connection [ProxyConnection[PooledConnection[ConnectionID:10 ClientConnectionId: 1bc00e6a-5c88-4899-9b15-042a0896afca]]] will not be managed by Spring
+2018-08-08 15:40:18 -==>  Preparing: select top 32768 b.StationID, b.datatime, a.data, a.dataplus, b.ATMP, b.WTMP from ST_TMP_R b left join water a on a.datatime = b.Datatime and a.stationid = b.StationID where b.StationID = ? order by b.Datatime desc 
+2018-08-08 15:40:18 -==> Parameters: 5001(String)
+2018-08-08 15:40:45 -<==      Total: 3950
+2018-08-08 15:40:45 -Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@3cc2b0c]
+2018-08-08 15:40:45 -Returning JDBC Connection to DataSource
+2018-08-08 15:40:45 -exportTmpR: 查询表层水温信息完成
+2018-08-08 15:40:45 -fileName + sheetName2018年汇总表2018-08-08 15:40:08.xls-溪洛渡大坝坝前      
+2018-08-08 15:40:55 -exportTmpR: 查询表层水温信息开始{StationID=5002}
+2018-08-08 15:40:55 -Creating a new SqlSession
+2018-08-08 15:40:55 -SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@409991d0] was not registered for synchronization because synchronization is not active
+2018-08-08 15:40:55 -Fetching JDBC Connection from DataSource
+2018-08-08 15:40:55 -JDBC Connection [ProxyConnection[PooledConnection[ConnectionID:10 ClientConnectionId: 1bc00e6a-5c88-4899-9b15-042a0896afca]]] will not be managed by Spring
+2018-08-08 15:40:55 -==>  Preparing: select top 32768 b.StationID, b.datatime, a.data, a.dataplus, b.ATMP, b.WTMP from ST_TMP_R b left join water a on a.datatime = b.Datatime and a.stationid = b.StationID where b.StationID = ? order by b.Datatime desc 
+2018-08-08 15:40:55 -==> Parameters: 5002(String)
+2018-08-08 15:40:55 -<==      Total: 3082
+2018-08-08 15:40:55 -Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@409991d0]
+2018-08-08 15:40:55 -Returning JDBC Connection to DataSource
+2018-08-08 15:40:55 -exportTmpR: 查询表层水温信息完成
+2018-08-08 15:40:55 -fileName + sheetName2018年汇总表2018-08-08 15:40:08.xls-溪洛渡水文站        
+2018-08-08 15:41:05 -exportTmpR: 查询表层水温信息开始{StationID=5003}
+2018-08-08 15:41:05 -Creating a new SqlSession
+2018-08-08 15:41:05 -SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@72d02cd7] was not registered for synchronization because synchronization is not active
+2018-08-08 15:41:05 -Fetching JDBC Connection from DataSource
+2018-08-08 15:41:05 -JDBC Connection [ProxyConnection[PooledConnection[ConnectionID:10 ClientConnectionId: 1bc00e6a-5c88-4899-9b15-042a0896afca]]] will not be managed by Spring
+2018-08-08 15:41:05 -==>  Preparing: select top 32768 b.StationID, b.datatime, a.data, a.dataplus, b.ATMP, b.WTMP from ST_TMP_R b left join water a on a.datatime = b.Datatime and a.stationid = b.StationID where b.StationID = ? order by b.Datatime desc 
+2018-08-08 15:41:05 -==> Parameters: 5003(String)
+2018-08-08 15:41:05 -<==      Total: 3720
+2018-08-08 15:41:05 -Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@72d02cd7]
+2018-08-08 15:41:05 -Returning JDBC Connection to DataSource
+2018-08-08 15:41:05 -exportTmpR: 查询表层水温信息完成
+2018-08-08 15:41:05 -fileName + sheetName2018年汇总表2018-08-08 15:40:08.xls-溪洛渡尾水洞1号     
+2018-08-08 15:41:15 -exportTmpR: 查询表层水温信息开始{StationID=5004}
+2018-08-08 15:41:15 -Creating a new SqlSession
+2018-08-08 15:41:15 -SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@2eae79a] was not registered for synchronization because synchronization is not active
+2018-08-08 15:41:15 -Fetching JDBC Connection from DataSource
+2018-08-08 15:41:15 -JDBC Connection [ProxyConnection[PooledConnection[ConnectionID:10 ClientConnectionId: 1bc00e6a-5c88-4899-9b15-042a0896afca]]] will not be managed by Spring
+2018-08-08 15:41:15 -==>  Preparing: select top 32768 b.StationID, b.datatime, a.data, a.dataplus, b.ATMP, b.WTMP from ST_TMP_R b left join water a on a.datatime = b.Datatime and a.stationid = b.StationID where b.StationID = ? order by b.Datatime desc 
+2018-08-08 15:41:15 -==> Parameters: 5004(String)
+2018-08-08 15:41:16 -<==      Total: 3311
+2018-08-08 15:41:16 -Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@2eae79a]
+2018-08-08 15:41:16 -Returning JDBC Connection to DataSource
+2018-08-08 15:41:16 -exportTmpR: 查询表层水温信息完成
+2018-08-08 15:41:16 -fileName + sheetName2018年汇总表2018-08-08 15:40:08.xls-溪洛渡尾水洞6号     
+2018-08-08 15:41:26 -exportTmpR: 查询表层水温信息开始{StationID=5005}
+2018-08-08 15:41:26 -Creating a new SqlSession
+2018-08-08 15:41:26 -SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@601c3880] was not registered for synchronization because synchronization is not active
+2018-08-08 15:41:26 -Fetching JDBC Connection from DataSource
+2018-08-08 15:41:26 -JDBC Connection [ProxyConnection[PooledConnection[ConnectionID:10 ClientConnectionId: 1bc00e6a-5c88-4899-9b15-042a0896afca]]] will not be managed by Spring
+2018-08-08 15:41:26 -==>  Preparing: select top 32768 b.StationID, b.datatime, a.data, a.dataplus, b.ATMP, b.WTMP from ST_TMP_R b left join water a on a.datatime = b.Datatime and a.stationid = b.StationID where b.StationID = ? order by b.Datatime desc 
+2018-08-08 15:41:26 -==> Parameters: 5005(String)
+2018-08-08 15:41:26 -<==      Total: 3756
+2018-08-08 15:41:26 -Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@601c3880]
+2018-08-08 15:41:26 -Returning JDBC Connection to DataSource
+2018-08-08 15:41:26 -exportTmpR: 查询表层水温信息完成
+2018-08-08 15:41:26 -fileName + sheetName2018年汇总表2018-08-08 15:40:08.xls-向家坝水文站        
+2018-08-08 15:41:36 -exportTmpR: 查询表层水温信息开始{StationID=5006}
+2018-08-08 15:41:36 -Creating a new SqlSession
+2018-08-08 15:41:36 -SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@6c073242] was not registered for synchronization because synchronization is not active
+2018-08-08 15:41:36 -Fetching JDBC Connection from DataSource
+2018-08-08 15:41:36 -JDBC Connection [ProxyConnection[PooledConnection[ConnectionID:10 ClientConnectionId: 1bc00e6a-5c88-4899-9b15-042a0896afca]]] will not be managed by Spring
+2018-08-08 15:41:36 -==>  Preparing: select top 32768 b.StationID, b.datatime, a.data, a.dataplus, b.ATMP, b.WTMP from ST_TMP_R b left join water a on a.datatime = b.Datatime and a.stationid = b.StationID where b.StationID = ? order by b.Datatime desc 
+2018-08-08 15:41:36 -==> Parameters: 5006(String)
+2018-08-08 15:41:36 -<==      Total: 3727
+2018-08-08 15:41:36 -Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@6c073242]
+2018-08-08 15:41:36 -Returning JDBC Connection to DataSource
+2018-08-08 15:41:36 -exportTmpR: 查询表层水温信息完成
+2018-08-08 15:41:36 -fileName + sheetName2018年汇总表2018-08-08 15:40:08.xls-绥江县城            
+2018-08-08 15:41:46 -exportTmpR: 查询表层水温信息开始{StationID=5007}
+2018-08-08 15:41:46 -Creating a new SqlSession
+2018-08-08 15:41:46 -SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@1f421d81] was not registered for synchronization because synchronization is not active
+2018-08-08 15:41:46 -Fetching JDBC Connection from DataSource
+2018-08-08 15:41:46 -JDBC Connection [ProxyConnection[PooledConnection[ConnectionID:10 ClientConnectionId: 1bc00e6a-5c88-4899-9b15-042a0896afca]]] will not be managed by Spring
+2018-08-08 15:41:46 -==>  Preparing: select top 32768 b.StationID, b.datatime, a.data, a.dataplus, b.ATMP, b.WTMP from ST_TMP_R b left join water a on a.datatime = b.Datatime and a.stationid = b.StationID where b.StationID = ? order by b.Datatime desc 
+2018-08-08 15:41:46 -==> Parameters: 5007(String)
+2018-08-08 15:41:46 -<==      Total: 3922
+2018-08-08 15:41:46 -Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@1f421d81]
+2018-08-08 15:41:46 -Returning JDBC Connection to DataSource
+2018-08-08 15:41:46 -exportTmpR: 查询表层水温信息完成
+2018-08-08 15:41:46 -fileName + sheetName2018年汇总表2018-08-08 15:40:08.xls-柏溪镇              
+2018-08-08 15:41:56 -exportTmpR: 查询表层水温信息开始{StationID=5008}
+2018-08-08 15:41:56 -Creating a new SqlSession
+2018-08-08 15:41:56 -SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@4ac1efc4] was not registered for synchronization because synchronization is not active
+2018-08-08 15:41:56 -Fetching JDBC Connection from DataSource
+2018-08-08 15:41:56 -JDBC Connection [ProxyConnection[PooledConnection[ConnectionID:10 ClientConnectionId: 1bc00e6a-5c88-4899-9b15-042a0896afca]]] will not be managed by Spring
+2018-08-08 15:41:56 -==>  Preparing: select top 32768 b.StationID, b.datatime, a.data, a.dataplus, b.ATMP, b.WTMP from ST_TMP_R b left join water a on a.datatime = b.Datatime and a.stationid = b.StationID where b.StationID = ? order by b.Datatime desc 
+2018-08-08 15:41:56 -==> Parameters: 5008(String)
+2018-08-08 15:41:56 -<==      Total: 3730
+2018-08-08 15:41:56 -Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@4ac1efc4]
+2018-08-08 15:41:56 -Returning JDBC Connection to DataSource
+2018-08-08 15:41:56 -exportTmpR: 查询表层水温信息完成
+2018-08-08 15:41:56 -fileName + sheetName2018年汇总表2018-08-08 15:40:08.xls-李庄                
+2018-08-08 15:42:06 -exportTmpR: 查询表层水温信息开始{StationID=5009}
+2018-08-08 15:42:06 -Creating a new SqlSession
+2018-08-08 15:42:06 -SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@4b981624] was not registered for synchronization because synchronization is not active
+2018-08-08 15:42:06 -Fetching JDBC Connection from DataSource
+2018-08-08 15:42:06 -JDBC Connection [ProxyConnection[PooledConnection[ConnectionID:10 ClientConnectionId: 1bc00e6a-5c88-4899-9b15-042a0896afca]]] will not be managed by Spring
+2018-08-08 15:42:06 -==>  Preparing: select top 32768 b.StationID, b.datatime, a.data, a.dataplus, b.ATMP, b.WTMP from ST_TMP_R b left join water a on a.datatime = b.Datatime and a.stationid = b.StationID where b.StationID = ? order by b.Datatime desc 
+2018-08-08 15:42:06 -==> Parameters: 5009(String)
