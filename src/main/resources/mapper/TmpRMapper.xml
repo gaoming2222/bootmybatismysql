@@ -29,4 +29,109 @@
        where b.StationID = #{StationID}
        order by b.Datatime desc
     </select>
+    
+    
+    
+    <select id="getTmpRAndWater" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+       select top 100
+       a.StationID,
+       a.Datatime,
+       a.ATMP,
+       a.WTMP,
+       b.data,
+       b.dataplus,
+       a.Trantype,
+       a.Sourcetype,
+       a.RDataTime
+       from 
+       ST_TMP_R a left join water b
+       on a.StationID = b.stationid and a.Datatime = b.datatime
+       where 1 = 1
+       <if test="StationID!=null and StationID!=''"> 
+       and a.StationID = #{StationID}
+       </if>
+       <if test="StrtDte!=null and StrtDte!=''"> 
+       and a.Datatime >= #{StrtDte}
+       </if>
+       <if test="EndDte!=null and EndDte!=''"> 
+       and #{EndDte} >= a.Datatime
+       </if>
+       order by b.Datatime desc
+    </select>
+    
+    <insert id="insertOneTmpR" parameterType="java.util.HashMap">
+  	   insert into ST_TMP_R
+  	   (StationID,Datatime,ATMP,WTMP,RDataTime,Trantype,Sourcetype) 
+  	   values
+  	   (#{StationID}, #{Datatime},#{ATMP},#{WTMP},#{RDataTime},#{Trantype},#{Sourcetype})
+	</insert>
+	
+	
+	<!-- 批量插入生成的兑换码 -->
+     <insert id ="insertTmpRBatch" parameterType="java.util.List" >
+           insert into ST_TMP_R
+           (StationID,Datatime,ATMP,WTMP,RDataTime,Trantype,Sourcetype) 
+           values
+            <foreach collection ="list" item="item" index= "index" separator =",">
+                (
+                #{item.StationID},
+                #{item.Datatime},
+                #{item.ATMP},
+                #{item.WTMP},
+                #{item.RDataTime},
+                #{item.Trantype},  
+                #{item.Sourcetype}
+                )
+            </foreach >
+     </insert >
+     
+     
+	
+	<insert id="insertOneWater" parameterType="Water">
+  	   insert into water
+  	   (stationid,datatime,dataplus,data,rdatatime,trantype,sourcetype) 
+  	   values
+  	   (#{StationID}, #{Datatime},#{dataplus},#{data},#{RDataTime},#{Trantype},#{Sourcetype})
+	</insert>
+	
+	
+	<!-- 批量插入生成的兑换码 -->
+     <insert id ="insertWaterBatch" parameterType="java.util.List" >
+           insert into water
+           (stationid,datatime,dataplus,data,rdatatime,trantype,sourcetype)
+           values
+            <foreach collection ="list" item="item" index= "index" separator =",">
+                (
+                #{item.StationID},
+                #{item.Datatime},
+                #{item.dataplus},
+                #{item.data},
+                #{item.RDataTime},
+                #{item.Trantype},  
+                #{item.Sourcetype}
+                )
+            </foreach >
+     </insert >
+	
+	<delete id="deleteTmpR" parameterType="java.util.HashMap">  
+        DELETE FROM ST_TMP_R WHERE StationID = #{StationID} AND  Datatime = #{Datatime}
+	</delete>
+	
+	
+<update id="updateTmpR" parameterType="java.util.HashMap">  
+        UPDATE ST_TMP_R  
+            SET ATMP = #{ATMP},   
+                WTMP = #{WTMP}
+         WHERE StationID = #{StationID} and  Datatime = #{Datatime}
+</update>
+
+
+<update id="updateWater" parameterType="java.util.HashMap">  
+        UPDATE water  
+            SET data = #{data},   
+                dataplus = #{dataplus}
+         WHERE stationid = #{StationID} and  datatime = #{Datatime}
+</update>
+	
+	
 </mapper>

@@ -2,7 +2,9 @@ package com.springboot.service;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -10,11 +12,21 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.apache.poi.hssf.usermodel.HSSFDataFormat;
+import org.apache.poi.hssf.usermodel.HSSFDateUtil;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.xy.DefaultXYDataset;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import com.springboot.entity.FbtmpR;
 import com.springboot.entity.FctmpP;
 import com.springboot.entity.Station;
@@ -23,6 +35,8 @@ import com.springboot.mapper.FctmpPMapper;
 import com.springboot.mapper.StationMapper;
 import com.springboot.mapper.TmpRMapper;
 import com.springboot.tools.ExcelUtil;
+
+
 
 import org.apache.log4j.Logger;
 
@@ -192,22 +206,22 @@ public class Data2ExcelServcie {
 		Map<String, Object> param = new HashMap<>();
 		Calendar calendar = Calendar.getInstance();
 		calendar.add(Calendar.DAY_OF_YEAR, -1);
-		calendar.set(Calendar.HOUR_OF_DAY, 9);
+		calendar.set(Calendar.HOUR_OF_DAY, 8);
 		calendar.set(Calendar.MINUTE, 0);
-		calendar.set(Calendar.SECOND, 0);
+		calendar.set(Calendar.SECOND, 30);
 		Calendar calendarFalg = (Calendar) calendar.clone();
 		Date strtDate = calendar.getTime();
-		calendar.add(Calendar.HOUR, 23);
+		calendar.add(Calendar.HOUR, 24);
 		Date enDate = calendar.getTime();
 		
 		
 
 		// TODO 由于没有数据,用于測試
-		String strt = "2018-05-28 09:00:00";
-		strtDate = sdf.parse(strt);
-		String end = "2018-5-29 08:00:00";
-		enDate = sdf.parse(end);
-		calendarFalg.setTime(strtDate);
+//		String strt = "2018-05-28 09:00:00";
+//		strtDate = sdf.parse(strt);
+//		String end = "2018-5-29 08:00:00";
+//		enDate = sdf.parse(end);
+//		calendarFalg.setTime(strtDate);
 
 		param.put("strtDate", strtDate);
 		param.put("enDate", enDate);
@@ -314,20 +328,206 @@ public class Data2ExcelServcie {
 		return resMap;
 	}
 
-//	// 发送响应流方法
-//	public void setResponseHeader(HttpServletResponse response, String fileName) {
-//		try {
-//			try {
-//				fileName = new String(fileName.getBytes(), "ISO-8859-1");
-//			} catch (UnsupportedEncodingException e) {
-//				e.printStackTrace();
-//			}
-//			response.setContentType("application/octet-stream;charset=ISO-8859-1");
-//			response.setHeader("Content-Disposition", "attachment;filename=" + fileName);
-//			response.addHeader("Pargam", "no-cache");
-//			response.addHeader("Cache-Control", "no-cache");
-//		} catch (Exception ex) {
-//			ex.printStackTrace();
-//		}
-//	}
+	@Transactional
+	public  Map<String,Object> getExcelData(MultipartFile file) throws IOException{
+		Map<String,Object> resMap = new HashMap<>();
+        checkFile(file);
+         //获得Workbook工作薄对象
+        Workbook workbook = getWorkBook(file);
+        //创建返回对象，把每行中的值作为一个数组，所有行作为一个集合返回
+        List<Map<String,Object>> params = new ArrayList<>();
+        if(workbook != null){
+            for(int sheetNum = 0;sheetNum < workbook.getNumberOfSheets();sheetNum++){
+                //获得当前sheet工作表
+                Sheet sheet = workbook.getSheetAt(sheetNum);
+                if(sheet == null){
+                    continue; 
+                }
+                //获得当前sheet的开始行
+                int firstRowNum  = sheet.getFirstRowNum();
+                //获得当前sheet的结束行
+                int lastRowNum = sheet.getLastRowNum();
+                //循环除了第一行的所有行
+                for(int rowNum = firstRowNum+2;rowNum <= lastRowNum;rowNum++){
+                	Map<String,Object> param = new HashMap<>();
+                    //获得当前行
+                	Row row = sheet.getRow(rowNum);
+                    if(row == null){
+                        continue;
+                    }
+                    //获得当前行的开始列
+                    int firstCellNum = row.getFirstCellNum();
+                    //获得当前行的列数
+                    int lastCellNum = row.getLastCellNum();
+                    //循环当前行
+                    for(int cellNum = firstCellNum; cellNum < lastCellNum;cellNum++){
+                    	Cell cell = row.getCell(cellNum);
+                    	String value = getCellValue(cell);
+                    	if(cellNum == 0){
+                    		param.put("StationID", value);
+                    	}
+                    	if(cellNum == 1){
+                    		param.put("month", value);
+                    	}
+                    	if(cellNum == 2){
+                    		param.put("day", value);
+                    	}
+                    	if(cellNum == 3){
+                    		param.put("hour", value);
+                    	}
+                    	if(cellNum == 4){
+                    		param.put("data", value);
+                    	}
+                    	if(cellNum == 5){
+                    		param.put("dataplus", value);
+                    	}
+                    	if(cellNum == 6){
+                    		param.put("ATMP", value);
+                    	}
+                    	if(cellNum == 7){
+                    		param.put("WTMP", value);
+                    	}
+                    }
+                    Calendar calendar = Calendar.getInstance();
+                    try {
+                    	calendar.set(2018, Integer.parseInt((String)param.get("month"))-1, Integer.parseInt((String)param.get("day")), Integer.parseInt((String)param.get("hour")), 0, 0);                 
+					} catch (Exception e) {
+						resMap.put("MSG","获取数据时间出错，请检查文件内容" + e.getMessage());
+						return resMap;
+					}
+                   Date dataTime = ((Calendar)calendar.clone()).getTime();
+                   param.put("Datatime", dataTime);
+                   param.put("RDataTime", dataTime);
+                   params.add(param);
+                }
+            }
+        }
+        
+        try{
+        	tmpRMapper.insertTmpRBatch(params);
+        	tmpRMapper.insertWaterBatch(params);
+        }catch(Exception e){
+        	resMap.put("MSG", "批量插入失败");
+        	logger.error(e.getMessage());
+        	return resMap;
+        }
+        
+        return resMap;
+    }
+	/**
+     * 检查文件是否存在
+     * @param file
+     * @throws IOException
+     */
+     private void checkFile(MultipartFile file) throws IOException{
+         //判断文件是否存在
+         if(null == file){
+             logger.error("checkFile：上传的excel文件为空！");
+         }
+         //获得文件名
+         String fileName = file.getOriginalFilename();
+         //判断文件是否是excel文件
+         if(!fileName.endsWith("xls") && !fileName.endsWith("xlsx")){
+        	 logger.error(fileName + "不是excel文件");
+         }
+     }
+     /**
+      * 获取Excel
+      * @param file
+      * @return
+      */
+     private  Workbook getWorkBook(MultipartFile file) {
+         //获得文件名
+         String fileName = file.getOriginalFilename();
+         //创建Workbook工作薄对象，表示整个excel
+         Workbook workbook = null;
+         try {
+             //获取excel文件的io流
+             InputStream is = file.getInputStream();
+             //根据文件后缀名不同(xls和xlsx)获得不同的Workbook实现类对象
+             if(fileName.endsWith("xls")){
+                 //2003
+                 workbook = new HSSFWorkbook(is);
+             }else if(fileName.endsWith("xlsx")){
+                 //2007 及2007以上
+                 workbook = new XSSFWorkbook(is);
+             }
+         } catch (IOException e) {
+             logger.error(e.getMessage());
+         }
+         return workbook;
+     }
+     
+     public  String getCellValue(Cell cell){
+         String cellValue = "";
+         if(cell == null){
+             return cellValue;
+         }
+     //判断数据的类型
+         switch (cell.getCellType()){
+             case Cell.CELL_TYPE_NUMERIC: //数字
+                 cellValue = stringDateProcess(cell);
+                 break;
+             case Cell.CELL_TYPE_STRING: //字符串
+                 cellValue = String.valueOf(cell.getStringCellValue());
+                 break;
+             case Cell.CELL_TYPE_BOOLEAN: //Boolean
+                 cellValue = String.valueOf(cell.getBooleanCellValue());
+                 break;
+             case Cell.CELL_TYPE_FORMULA: //公式
+                 cellValue = String.valueOf(cell.getCellFormula());
+                 break;
+             case Cell.CELL_TYPE_BLANK: //空值
+                 cellValue = "";
+                 break;
+             case Cell.CELL_TYPE_ERROR: //故障
+                 cellValue = "非法字符";
+                 break;
+             default:
+                 cellValue = "未知类型";
+                 break;
+         }
+         return cellValue;
+     }
+     
+     
+     /**
+      * 时间格式处理
+      * @return
+      * @author Liu Xin Nan
+      * @data 2017年11月27日
+      */
+     private String stringDateProcess(Cell cell){
+         String result = new String();  
+         if (HSSFDateUtil.isCellDateFormatted(cell)) {// 处理日期格式、时间格式  
+             SimpleDateFormat sdf = null;  
+             if (cell.getCellStyle().getDataFormat() == HSSFDataFormat.getBuiltinFormat("h:mm")) {  
+                 sdf = new SimpleDateFormat("HH:mm");  
+             } else {// 日期  
+                 sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");  
+             }  
+             Date date = cell.getDateCellValue();  
+             result = sdf.format(date);  
+         } else if (cell.getCellStyle().getDataFormat() == 58) {  
+             // 处理自定义日期格式：m月d日(通过判断单元格的格式id解决，id的值是58)  
+             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");  
+             double value = cell.getNumericCellValue();  
+             Date date = org.apache.poi.ss.usermodel.DateUtil  
+                     .getJavaDate(value);  
+             result = sdf.format(date);  
+         } else {  
+             double value = cell.getNumericCellValue();  
+             CellStyle style = cell.getCellStyle();  
+             DecimalFormat format = new DecimalFormat();  
+             String temp = style.getDataFormatString();  
+             // 单元格设置成常规  
+             if (temp.equals("General")) {  
+                 format.applyPattern("#");  
+             }  
+             result = format.format(value);  
+         }  
+         
+         return result;
+     }
+    
 }
